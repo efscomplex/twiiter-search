@@ -1,4 +1,6 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The app is consuming the twitter api in a standard mode. It has provided a proxy server in order to avoid CORS policy from twitter. Hence, you must have an account user with a barer TOKEN and place it in a .env file in the backend folder as a variable named TOKEN. 
+
+To Fix: The app hooks a fake infinity scroll, not working as desired (not using intersecion observer yet.. must fix)
 
 ## Available Scripts
 
