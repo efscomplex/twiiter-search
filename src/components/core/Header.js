@@ -1,58 +1,75 @@
-import React from 'react'
 import {
    useContext,
-   useState
-} from 'react'
-import { FeedsContext } from 'hooks/useFeeds'
+   useState } from 'react'
+import {
+   FeedsContext } from 'context'
+import {
+   Hr, 
+   Topic,
+   Select,} from 'components/base'
+
+import React from 'react'
+import Action from 'actions'
 import getFeeds from 'services/feeds'
 import styled from 'styled-components'
 
 export default function({setQuery}){
-   const { actions, queryOpts, dispatch, loading } = useContext(FeedsContext)
+   const {
+      $feeds,
+      queryOpts,
+      $loading,
+      loading,
+   } = useContext(FeedsContext)
    
    const [
       timeout,
       updateTimeout
    ] = useState(false)
+   const [
+      value,
+      setValue
+   ] = useState('')
    
-   const querySearch = event => {
-      const query = event.target.value
+   const querySearch = ({target}) => {
+      if (loading) return
+
+      setValue(target.value)
+      const query = target.value
       clearTimeout(timeout)
 
       const timeing = setTimeout(
          async () => {
             if (loading) return 
-            dispatch({ type: 'LOADING' })
-            const feeds = ( query === '' )
-               ? []
-               : await getFeeds(query, queryOpts)
-            actions.setFeeds(feeds)
-            dispatch({type: 'LOADED'})
-            setQuery(query)
-         }, 500
+            try {
+               Action.setLoading(true, $loading)
+               const feeds = ( query === '' )
+                  ? []
+                  : await getFeeds(query, queryOpts)
+               Action.setFeeds(feeds, $feeds)
+               Action.setLoading(false, $loading)
+               setQuery(query)
+            }catch(err){console.log(err)}
+         }, 750
       )
+
       updateTimeout(timeing)
    }
 
    return (
       <Header>
-         <Topic> Topic </Topic>
+         <Topic> Search </Topic>
          <input 
             type='text' 
             placeholder='trending search' 
             className='form-control' 
-            onChange={querySearch}/>
+            onChange={querySearch}
+            value={value}/>
+         <Select/>
          <Hr/>
       </Header>
    )
 }
 
-const Topic = styled.h1`
-   font-weight: 500;
-   font-size: 1.6rem;
-   color: var(--info);
-   margin-right: 2rem;
-`
 const Header = styled.header`
    padding: 1rem;
    display: flex;
@@ -62,10 +79,4 @@ const Header = styled.header`
    input {
       width: 16rem;
    }
-`
-const Hr = styled.hr`
-   position: absolute;
-   margin-top: 2rem;
-   border-top: 1px solid var(--info);
-   width: 80%;
 `

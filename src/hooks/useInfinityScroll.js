@@ -1,29 +1,37 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect } from 'react'
+import { fromEvent } from 'rxjs'
+import { map, filter, debounceTime, distinct } from 'rxjs/operators'
 
-function mustLoad(breakPoint = 300){
-   const height = document.documentElement.scrollHeight
-   const clientHeight = document.documentElement.clientHeight
-   const scroll = window.scrollY
-   
-   return  (height - scroll -clientHeight) < breakPoint 
+const HEIGHT = {
+   get win(){ return document.documentElement.clientHeight },
+   get scroll(){ return document.documentElement.scrollHeight },
 }
 
-function useInfinityScroll(handle, parent = null){
+function useInfinityScroll({
+   callToService,
+   thresold = 300,
+   setLoading = () => true,
+   loading
+}){
+   const scroller = ( ) =>
+      fromEvent(window,'scroll')
+         .pipe(
+            filter( () => !loading ),
+            map(() => window.scrollY),
+            filter( scroll => (HEIGHT.scroll - scroll - HEIGHT.win) <  thresold),
+            debounceTime(200),
+            distinct(),
+         )
 
-   const checkIfLoad = useCallback(
-      () => {
-         if (mustLoad()) return handle() 
-         return  null
-      },
-      [handle]
-   )
-  
    useEffect(
       () => {
-         const container = parent ? parent : window
-         container.addEventListener('scroll', checkIfLoad)
-      },
-      [parent, checkIfLoad]
+         scroller().subscribe(
+            async e => {
+               await callToService()
+               console.log(loading)
+            }
+         )
+      }
    )
 }
 

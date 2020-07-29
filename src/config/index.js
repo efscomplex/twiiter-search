@@ -3,5 +3,6 @@ export const options = {
    count: 5,
    type: 'recent',
    max_id: 0,
+   flat: false,
 }
 export const initial = 'hulk'

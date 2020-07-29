@@ -1,9 +1,7 @@
-import React from 'react'
 import { useReducer } from 'react'
 
 export enum LoaderActions  {
-   LOADING = 'LOADING',
-   LOADED = 'LOADED'
+   SET_LOADING = 'SET_LOADING'
 }
 
 type Action = {
@@ -11,11 +9,9 @@ type Action = {
    payload?: any;
 }
 
-function reducer(state: Boolean, { type }:Action){
-   if (type === LoaderActions.LOADING) 
-      return true
-   if (type === LoaderActions.LOADED) 
-      return false
+function reducer(state: Boolean, { type, payload }:Action){
+   if (type === LoaderActions.SET_LOADING) 
+      return payload
 
    return state
 }
@@ -23,16 +19,11 @@ function reducer(state: Boolean, { type }:Action){
 export default function useLoader(initial= false){
    const [
       loading,
-      dispatch,
+      $loading,
    ] = useReducer(reducer, initial)
 
    return {
       loading,
-      dispatch,
+      $loading,
    }
 }
-
-export const Loader 
-   =  <div className="spinner-border" role="status">
-         <span className="sr-only">Loading...</span>
-      </div>
