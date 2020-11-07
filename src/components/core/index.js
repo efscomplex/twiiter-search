@@ -1,7 +1,7 @@
 import styled from 'styled-components'
-import Header from './Header'
-import Main from './Main'
-import Footer from './Footer'
+import Header from './header/Header'
+import Main from './main/Main'
+import Footer from './footer/Footer'
 
 const App = styled.div`
    min-height: 100vh;

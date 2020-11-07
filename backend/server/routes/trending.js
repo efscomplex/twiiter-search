@@ -5,8 +5,9 @@ const dotenv = require('dotenv')
 const { toFeed } = require('../utils')
 
 dotenv.config()
+
 const TOKEN = process.env.TOKEN
-const endpoint = process.env.ENDPOINT
+const endpoint = 'https://api.twitter.com/1.1/search/tweets.json?'
 
 const headers = {
    'Content-Type': 'application/json',
@@ -35,11 +36,11 @@ router.post('/:query', async (req, res ) => {
    fetch(url, fetchOpts)
       .then(res => res.json())
       .then(({statuses}) => {
-         const feeds = statuses 
-            ? statuses.map(feeds => {
-               console.log(feeds)
-               return toFeed(feeds)})
-            : []
+         const feeds = statuses
+				? statuses.map((feeds) => {
+						return toFeed(feeds)
+				  })
+				: []
          res.send(feeds)
       })
       .catch( err => res.send([]) )

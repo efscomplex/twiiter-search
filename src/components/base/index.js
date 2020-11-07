@@ -1,6 +1,0 @@
-export { default as Loader} from './Loader'
-export { default as Feed} from './Feed'
-export { default as Hr} from './Hr'
-export { default as Topic} from './Topic'
-export { default as Emoticon} from './Emoticon' 
-export { default as Select} from './Select' 

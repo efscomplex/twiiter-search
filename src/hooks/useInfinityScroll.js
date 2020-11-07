@@ -8,31 +8,26 @@ const HEIGHT = {
 }
 
 function useInfinityScroll({
-   callToService,
-   thresold = 300,
-   setLoading = () => true,
-   loading
-}){
-   const scroller = ( ) =>
-      fromEvent(window,'scroll')
-         .pipe(
-            filter( () => !loading ),
-            map(() => window.scrollY),
-            filter( scroll => (HEIGHT.scroll - scroll - HEIGHT.win) <  thresold),
-            debounceTime(200),
-            distinct(),
-         )
+	callToService,
+	thresold = 300,
+	setLoading = () => true,
+	loading
+}) {
+	const scroller = () =>
+		fromEvent(window, 'scroll').pipe(
+			filter(() => !loading),
+			map(() => window.scrollY),
+			filter((scroll) => HEIGHT.scroll - scroll - HEIGHT.win < thresold),
+			debounceTime(200),
+			distinct()
+		)
 
-   useEffect(
-      () => {
-         scroller().subscribe(
-            async e => {
-               await callToService()
-               console.log(loading)
-            }
-         )
-      }
-   )
+	useEffect(() => {
+		scroller().subscribe(async (e) => {
+			await callToService()
+			console.log(loading)
+		})
+	})
 }
 
 export default useInfinityScroll
