@@ -1,17 +1,16 @@
 import React, { useState } from 'react'
-import { useMemo, useCallback } from 'react'
+import { useCallback } from 'react'
 
-import { useInfinityScroll, useFeedsFetcher } from 'hooks'
+import { useFeedsFetcher, useIntersectionObserver } from 'hooks'
 import { FeedsContext } from 'context'
+import { query } from 'config'
 
 import App from 'components/core'
 
 import getFeeds from 'services/feeds'
 import Action from 'actions'
 
-const query = 'hulk'
-
-export default function () {
+export default function (props) {
 	const [currentQuery, setCurrentQuery] = useState(query)
 	const Feed = useFeedsFetcher(query)
 
@@ -22,20 +21,14 @@ export default function () {
 		Action.setLoading(false, Feed.$loading)
 	}, [Feed.$feeds, currentQuery, Feed.queryOpts, Feed.$loading])
 
-	const scrollOpts = useMemo(
-		() => ({
-			callToService: callback,
-			thresold: 300,
-			setLoading: (val) => Action.setLoading(val, Feed.$loading),
-			loading:  Feed.loading
-		}),
-		[callback, Feed.$loading, Feed.loading]
-	)
 
-	useInfinityScroll(scrollOpts)
+   useIntersectionObserver(
+      callback,
+      'lastFeed'
+   )
 
 	return (
-		<App>
+		<App {...props}>
 			<FeedsContext.Provider value={Feed}>
 				<App.Header setQuery={setCurrentQuery} fetcher={Feed.fetcher} />
 				<App.Main query={currentQuery} />

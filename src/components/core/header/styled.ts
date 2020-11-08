@@ -1,13 +1,15 @@
 import styled from 'styled-components'
 
 export default styled.header`
-	padding: 1rem;
+	padding: 3rem;
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: center;
-	align-items: center;
+	gap: 2rem;
+	justify-content: space-between;
+	align-items: flex-end;
 
 	input {
 		width: 16rem;
-	}
+   }
+   
 `

@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
-import { Topic } from 'components/base'
-import { Hr } from 'components/common'
-
+import React, { useState, useContext } from 'react'
+import { Emoticon } from 'components/common'
+import { ThemeContext } from 'HOCs'
 import Header from './styled'
+import Switch from 'components/common/Switch'
+
 
 export default function ({ setQuery, fetcher }) {
 	const [timeout, updateTimeout] = useState(false)
-	const [value, setValue] = useState('')
+   const [value, setValue] = useState('')
+
+   const setThemeMode = useContext(ThemeContext)
 
 	const onSearch = ({ target }) => {
 		const query = target.value
@@ -16,10 +19,11 @@ export default function ({ setQuery, fetcher }) {
 		const timeing = setTimeout(fetcher, 750)
 		updateTimeout(timeing)
 	}
-
+   const toggleTheme = () => {
+		setThemeMode((mode) => (mode === 'light' ? 'dark' : 'light'))
+	}
 	return (
 		<Header>
-			<Topic> Search </Topic>
 			<input
 				type='text'
 				placeholder='trending search'
@@ -27,7 +31,10 @@ export default function ({ setQuery, fetcher }) {
 				onChange={onSearch}
 				value={value}
 			/>
-			<Hr />
+			<Switch callback={toggleTheme}>
+				<Emoticon icon='🌙' />
+				<Emoticon icon='☀️' />
+			</Switch>
 		</Header>
 	)
 }
