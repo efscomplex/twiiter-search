@@ -3,7 +3,7 @@ import Feed from './styled'
 
 export default function ({ username, text, created, avatar }: any) {
 	return (
-		<Feed className='bg-dark text-white'>
+		<Feed>
 			<div>
 				<img src={avatar} alt='avatar-pic' />
 			</div>

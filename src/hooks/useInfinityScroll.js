@@ -25,7 +25,6 @@ function useInfinityScroll({
 	useEffect(() => {
 		scroller().subscribe(async (e) => {
 			await callToService()
-			console.log(loading)
 		})
 	})
 }

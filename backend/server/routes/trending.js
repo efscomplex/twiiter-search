@@ -15,11 +15,11 @@ const fetchOpts = { method: 'GET', headers }
 
 router.post('/:query', async (req, res) => {
 	const query = req.params.query //flat ? req.params.query : '%23' + req.params.query
-   const url = getUrlFromParams({ query, ...req.body })
-   console.log(url)
+	const url = getUrlFromParams({ query, ...req.body })
+
 	fetch(url, fetchOpts)
-   .then((resp) => resp.json())
-      .then((data) => {
+		.then((resp) => resp.json())
+		.then((data) => {
 			res.send(data)
 		})
 		.catch((err) => res.send({ data: [], meta: {} }))
