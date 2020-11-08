@@ -1,8 +1,6 @@
 export const options = {
-   lang: 'es',
-   count: 5,
-   type: 'recent',
-   max_id: 0,
-   flat: false,
+	lang: 'es',
+	maxResults: 10,
+	nextToken: ''
 }
-export const initial = 'hulk'
+export const query = 'hulk'

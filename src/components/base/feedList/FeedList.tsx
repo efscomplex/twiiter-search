@@ -2,18 +2,12 @@ import React, { useContext } from 'react'
 import uniqid from 'uniqid'
 import Feed from 'components/base/feed/Feed'
 import { FeedsContext } from 'context'
-import { Loader } from 'components/common'
 import Wrap from './styled'
 
 export default function FeedList() {
-	const { feeds, loading } = useContext(FeedsContext)
-
-	return (
-		<Wrap>
-			{feedsMap(feeds)}
-			{loading && <Loader />}
-		</Wrap>
-	)
+	const { feeds } = useContext(FeedsContext)
+   
+	return <Wrap>{feedsMap(feeds.data)}</Wrap>
 }
 const feedsMap = (feeds: any) =>
-	feeds.map((feed: any) => <Feed key={uniqid()} {...feed} />)
+	feeds?.map((feed: any) => <Feed key={uniqid()} {...feed} />)

@@ -1,40 +1,19 @@
-import React from 'react'
-import { useContext, useState } from 'react'
-
-import { FeedsContext } from 'context'
-import { Topic, Select } from 'components/base'
+import React, { useState } from 'react'
+import { Topic } from 'components/base'
 import { Hr } from 'components/common'
 
 import Header from './styled'
-import Action from 'actions'
-import getFeeds from 'services/feeds'
 
-export default function ({ setQuery }) {
-	const { $feeds, queryOpts, $loading, loading } = useContext(FeedsContext)
-
+export default function ({ setQuery, fetcher }) {
 	const [timeout, updateTimeout] = useState(false)
 	const [value, setValue] = useState('')
 
-	const querySearch = ({ target }) => {
-		if (loading) return
-
-		setValue(target.value)
+	const onSearch = ({ target }) => {
 		const query = target.value
+		setValue(query)
+		if (query === '') return
 		clearTimeout(timeout)
-
-		const timeing = setTimeout(async () => {
-			if (loading) return
-			try {
-				Action.setLoading(true, $loading)
-				const feeds = query === '' ? [] : await getFeeds(query, queryOpts)
-				Action.setFeeds(feeds, $feeds)
-				Action.setLoading(false, $loading)
-				setQuery(query)
-			} catch (err) {
-				console.log(err)
-			}
-		}, 750)
-
+		const timeing = setTimeout(fetcher, 750)
 		updateTimeout(timeing)
 	}
 
@@ -45,10 +24,9 @@ export default function ({ setQuery }) {
 				type='text'
 				placeholder='trending search'
 				className='form-control'
-				onChange={querySearch}
+				onChange={onSearch}
 				value={value}
 			/>
-			<Select />
 			<Hr />
 		</Header>
 	)

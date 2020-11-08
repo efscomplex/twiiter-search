@@ -1,28 +1,29 @@
 type Opts = {
-   count: number;
-   type: string;
-   lang: string;
+   maxResults: number,
+   nextToken?: string | null,
+   [key: string]: any
 }
 
-const opts = {
-   count: 10,
-   type: 'recent',
-   lang: 'es',
+const defOpts = {
+   maxResults: 10,
 }
+const host = 'localhost:5000'
 
-async function searchFeedsBy(query: string, $opts: Opts = opts){
-   const url = `http://localhost:4000/trending/${query}`
-
+async function searchFeedsBy(query: string, opts: Opts = defOpts){
+   const url = `http://${host}/trending/${query}`
+   
    const res = await fetch(url, {
       method: 'POST',
-      body: JSON.stringify($opts),
+      body: JSON.stringify(opts),
       headers:{
          'Content-Type': 'application/json'
        }
    })
-   const feeds = await res.json()
    
-   return feeds
+   const data = await res.json()
+   console.log('query data ffrom client', data);
+   
+   return data
 }  
 
 export default searchFeedsBy

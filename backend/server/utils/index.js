@@ -6,7 +6,7 @@ const toFeed = tweet => (
       username: tweet.user.screen_name,
       description: tweet.user.description,
       avatar: tweet.user.profile_image_url_https,
-      id: tweet.id
+      id: tweet.id 
    }
 )
 

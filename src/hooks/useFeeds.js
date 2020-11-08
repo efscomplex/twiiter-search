@@ -16,21 +16,17 @@ function reducer(state, {
       case (FeedsActions.SET_FEEDS):
          return payload
       case (FeedsActions.PUSH_FEEDS):
-         return [...payload, ...state]
-
+         return { data: [...state.data, ...payload.data], meta: payload.meta }
       default:
          return state
    }
 }
 
-export default function useFeeds(initial = []) {
-   const [
-      feeds,
-      $feeds
-   ] = useReducer(reducer, initial)
+export default function useFeeds(initial = { data: [], meta: {} }) {
+	const [feeds, $feeds] = useReducer(reducer, initial)
 
-   return {
-      feeds,
-      $feeds,
-   }
+	return {
+		feeds,
+		$feeds
+	}
 }
